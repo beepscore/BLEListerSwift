@@ -44,33 +44,12 @@ class BLEDiscoveryTests: XCTestCase {
 
     // MARK: test post notifications
 
-    func testPostDidRefresh () {
-        // https://developer.apple.com/documentation/xctest/asynchronous_tests_and_expectations/testing_asynchronous_operations_with_expectations
-        XCTAssertTrue(waitForDidRefreshNotification() == .completed)
-    }
-
-    func waitForDidRefreshNotification () -> XCTWaiterResult {
-        let shared = BLEDiscovery.shared
-        let ncDefault = NotificationCenter.default
-
-        // expectation is fulfilled when notification is posted
-        let expectation = XCTNSNotificationExpectation(name: BLEDiscoveryConstants.didRefreshNotification,
-                                                       object: shared,
-                                                       notificationCenter: ncDefault)
-
-        // call method under test
-        shared.postDidRefresh(notificationCenter: shared.notificationCenter)
-
-        let result = XCTWaiter().wait(for: [expectation], timeout: 1)
-        return result
-    }
-
     /// Asynchronous test
     /// https://developer.apple.com/documentation/xctest/asynchronous_tests_and_expectations/testing_asynchronous_operations_with_expectations
     /// Alternatively could use more verbose XCTWaiter and check it returns .completed
     /// http://masilotti.com/xctest-waiting/
     /// http://shashikantjagtap.net/asynchronous-ios-testing-swift-xcwaiter/
-    func testPostDidRefresh2 () {
+    func testPostDidRefresh () {
         let shared = BLEDiscovery.shared
         let ncDefault = NotificationCenter.default
 
