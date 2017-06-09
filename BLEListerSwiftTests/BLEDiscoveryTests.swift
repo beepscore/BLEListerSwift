@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import CoreBluetooth
 @testable import BLEListerSwift
 
 class BLEDiscoveryTests: XCTestCase {
