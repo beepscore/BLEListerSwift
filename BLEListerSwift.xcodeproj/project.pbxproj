@@ -14,6 +14,8 @@
 		DE4248071EEA3905001BFE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE4248061EEA3905001BFE21 /* Assets.xcassets */; };
 		DE42480A1EEA3905001BFE21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE4248081EEA3905001BFE21 /* LaunchScreen.storyboard */; };
 		DE4248151EEA3906001BFE21 /* BLEListerSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4248141EEA3906001BFE21 /* BLEListerSwiftTests.swift */; };
+		DE6561941EEA514400E0A0B5 /* MasterViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */; };
+		DE6561961EEA56A700E0A0B5 /* BLEDiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */; };
 		DEF60ED41EEA461A001D1E73 /* BLEDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF60ED31EEA461A001D1E73 /* BLEDiscovery.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +41,8 @@
 		DE4248101EEA3906001BFE21 /* BLEListerSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BLEListerSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE4248141EEA3906001BFE21 /* BLEListerSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEListerSwiftTests.swift; sourceTree = "<group>"; };
 		DE4248161EEA3906001BFE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewControllerTests.swift; sourceTree = "<group>"; };
+		DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDiscoveryTests.swift; sourceTree = "<group>"; };
 		DEF60ECF1EEA3F8C001D1E73 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DEF60ED31EEA461A001D1E73 /* BLEDiscovery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEDiscovery.swift; path = Bluetooth/BLEDiscovery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -99,7 +103,9 @@
 			isa = PBXGroup;
 			children = (
 				DE4248141EEA3906001BFE21 /* BLEListerSwiftTests.swift */,
+				DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */,
 				DE4248161EEA3906001BFE21 /* Info.plist */,
+				DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */,
 			);
 			path = BLEListerSwiftTests;
 			sourceTree = "<group>";
@@ -228,7 +234,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE6561941EEA514400E0A0B5 /* MasterViewControllerTests.swift in Sources */,
 				DE4248151EEA3906001BFE21 /* BLEListerSwiftTests.swift in Sources */,
+				DE6561961EEA56A700E0A0B5 /* BLEDiscoveryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
