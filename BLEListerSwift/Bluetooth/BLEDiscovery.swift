@@ -123,7 +123,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         guard let nc = notificationCenter else {
             return
         }
-        nc.post(name: NSNotification.Name(rawValue: BLEDiscoveryConstants.didRefreshNotification),
+        nc.post(name: NSNotification.Name(rawValue: BLEDiscoveryConstants.statePoweredOffNotification),
                 object: self,
                 userInfo: nil)
     }

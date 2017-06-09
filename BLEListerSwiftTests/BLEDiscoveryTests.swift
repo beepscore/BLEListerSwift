@@ -65,4 +65,20 @@ class BLEDiscoveryTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func testPostPoweredOff () {
+        let shared = BLEDiscovery.shared
+        let ncDefault = NotificationCenter.default
+
+        // XCTNSNotificationExpectation is fulfilled iff notification is posted
+        let expectation = XCTNSNotificationExpectation(name: BLEDiscoveryConstants.statePoweredOffNotification,
+                                                       object: shared,
+                                                       notificationCenter: ncDefault)
+
+        // call method under test
+        shared.postPoweredOff(notificationCenter: shared.notificationCenter)
+
+        // wait until the expectation if fulfilled
+        wait(for: [expectation], timeout: 1.0)
+    }
+
 }
