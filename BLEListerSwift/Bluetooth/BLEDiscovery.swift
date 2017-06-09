@@ -42,3 +42,11 @@ class BLEDiscovery: NSObject {
     }
 
 }
+
+extension BLEDiscovery: CBCentralManagerDelegate {
+
+    func centralManagerDidUpdateState(_: CBCentralManager) {
+
+    }
+
+}
