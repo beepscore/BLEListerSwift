@@ -15,6 +15,7 @@
 		DE42480A1EEA3905001BFE21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE4248081EEA3905001BFE21 /* LaunchScreen.storyboard */; };
 		DE6561941EEA514400E0A0B5 /* MasterViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */; };
 		DE6561961EEA56A700E0A0B5 /* BLEDiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */; };
+		DE827D351EEB661000E45D64 /* CBCentralManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE827D341EEB661000E45D64 /* CBCentralManagerExtension.swift */; };
 		DEF60ED41EEA461A001D1E73 /* BLEDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF60ED31EEA461A001D1E73 /* BLEDiscovery.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		DE4248161EEA3906001BFE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewControllerTests.swift; sourceTree = "<group>"; };
 		DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDiscoveryTests.swift; sourceTree = "<group>"; };
+		DE827D341EEB661000E45D64 /* CBCentralManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBCentralManagerExtension.swift; path = Bluetooth/CBCentralManagerExtension.swift; sourceTree = "<group>"; };
 		DEF60ECF1EEA3F8C001D1E73 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DEF60ED31EEA461A001D1E73 /* BLEDiscovery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEDiscovery.swift; path = Bluetooth/BLEDiscovery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF60ED31EEA461A001D1E73 /* BLEDiscovery.swift */,
+				DE827D341EEB661000E45D64 /* CBCentralManagerExtension.swift */,
 			);
 			name = Bluetooth;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE827D351EEB661000E45D64 /* CBCentralManagerExtension.swift in Sources */,
 				DEF60ED41EEA461A001D1E73 /* BLEDiscovery.swift in Sources */,
 				DE4248021EEA3905001BFE21 /* DetailViewController.swift in Sources */,
 				DE4248001EEA3905001BFE21 /* MasterViewController.swift in Sources */,
