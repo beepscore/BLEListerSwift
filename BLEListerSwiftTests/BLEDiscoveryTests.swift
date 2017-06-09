@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import CoreBluetooth
 @testable import BLEListerSwift
 
 class BLEDiscoveryTests: XCTestCase {
@@ -81,4 +82,12 @@ class BLEDiscoveryTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
+    func testClearDevices () {
+        let shared = BLEDiscovery.shared
+
+        shared.clearDevices()
+
+        XCTAssertEqual(shared.foundPeripherals!, [])
+        XCTAssertEqual(shared.connectedServices!, [])
+    }
 }

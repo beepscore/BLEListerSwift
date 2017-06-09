@@ -127,10 +127,11 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                 object: self,
                 userInfo: nil)
     }
-    
-    
+
     func clearDevices() {
-        // FIXME: implement
+        self.foundPeripherals = []
+        // TODO: reset each service before removing it? Reference Apple TemperatureSensor project
+        self.connectedServices = []
     }
     
     func loadSavedDevices() {
