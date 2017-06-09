@@ -16,7 +16,6 @@ class MasterViewControllerTests: XCTestCase {
         XCTAssertNil(vc.bleDiscovery)
         vc.viewDidLoad()
         XCTAssertNotNil(vc.bleDiscovery)
-
     }
 
 }
