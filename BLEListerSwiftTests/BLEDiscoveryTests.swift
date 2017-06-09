@@ -54,7 +54,7 @@ class BLEDiscoveryTests: XCTestCase {
         let ncDefault = NotificationCenter.default
 
         // XCTNSNotificationExpectation is fulfilled iff notification is posted
-        let expectation = XCTNSNotificationExpectation(name: BLEDiscoveryConstants.didRefreshNotification,
+        let expectation = XCTNSNotificationExpectation(name: BLEDiscoveryConstants.didRefreshNotification.rawValue,
                                                        object: shared,
                                                        notificationCenter: ncDefault)
 
@@ -70,7 +70,7 @@ class BLEDiscoveryTests: XCTestCase {
         let ncDefault = NotificationCenter.default
 
         // XCTNSNotificationExpectation is fulfilled iff notification is posted
-        let expectation = XCTNSNotificationExpectation(name: BLEDiscoveryConstants.statePoweredOffNotification,
+        let expectation = XCTNSNotificationExpectation(name: BLEDiscoveryConstants.statePoweredOffNotification.rawValue,
                                                        object: shared,
                                                        notificationCenter: ncDefault)
 
