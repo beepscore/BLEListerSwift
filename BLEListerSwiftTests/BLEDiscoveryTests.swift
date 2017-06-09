@@ -21,4 +21,25 @@ class BLEDiscoveryTests: XCTestCase {
         let shared1 = BLEDiscovery.shared
         XCTAssertTrue(shared1 === shared0)
     }
+
+    func testSharedCentralManager () {
+        let shared = BLEDiscovery.shared
+        XCTAssertNotNil(shared.centralManager)
+    }
+
+    func testSharedFoundPeripherals () {
+        let shared = BLEDiscovery.shared
+        XCTAssertNotNil(shared.foundPeripherals)
+    }
+
+    func testSharedConnectedServices () {
+        let shared = BLEDiscovery.shared
+        XCTAssertNotNil(shared.connectedServices)
+    }
+
+    func testSharedNotificationCenter () {
+        let shared = BLEDiscovery.shared
+        XCTAssertEqual(shared.notificationCenter, NotificationCenter.default)
+    }
+
 }
