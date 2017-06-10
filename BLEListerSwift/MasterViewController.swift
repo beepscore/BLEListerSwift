@@ -25,7 +25,7 @@ class MasterViewController: UITableViewController {
 
         let scanButton = UIBarButtonItem(barButtonSystemItem: .add,
                                          target: self,
-                                         action: #selector(safeScanForPeripherals))
+                                         action: #selector(safeScanForPeripherals(_:)))
         navigationItem.rightBarButtonItem = scanButton
 
         if let split = splitViewController {
@@ -99,7 +99,7 @@ class MasterViewController: UITableViewController {
 
     // MARK: -
 
-    func safeScanForPeripherals() {
+    func safeScanForPeripherals(_ sender: Any) {
         guard let discovery = self.bleDiscovery else {
             return
         }
