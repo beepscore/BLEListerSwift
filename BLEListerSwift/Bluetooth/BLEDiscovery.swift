@@ -122,7 +122,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 
         case .resetting:
             clearDevices()
-            self.postDidRefresh(notificationCenter: self.notificationCenter)
+            self.postDidRefresh(notificationCenter: self.notificationCenter, userInfo: nil)
             //[peripheralDelegate alarmServiceDidReset];
 
         case .unsupported:
@@ -136,12 +136,12 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 
         case .poweredOff:
             self.clearDevices()
-            self.postDidRefresh(notificationCenter: self.notificationCenter)
+            self.postDidRefresh(notificationCenter: self.notificationCenter, userInfo: nil)
 
             // Tell user to power ON BT for functionality, but not on first run
             // the Framework will alert in that instance.
             if !isFirstRun {
-                self.postPoweredOff(notificationCenter: self.notificationCenter)
+                self.postPoweredOff(notificationCenter: self.notificationCenter, userInfo: nil)
             }
 
         case .poweredOn:
@@ -155,32 +155,50 @@ extension BLEDiscovery: CBCentralManagerDelegate {
             //                // method documentation: Attempts to connect to a peripheral do not time out.
             //                [central connectPeripheral:peripheral options:nil];
             //            }
-            self.postDidRefresh(notificationCenter: self.notificationCenter)
+            self.postDidRefresh(notificationCenter: self.notificationCenter, userInfo: nil)
         }
 
         isFirstRun = false
     }
 
+    func centralManager(_ central: CBCentralManager,
+                        didDiscover peripheral: CBPeripheral,
+                        advertisementData: [String: Any],
+                        rssi: NSNumber) {
+
+        // self.updatePeripherals(peripheral: peripheral)
+
+        // Argument rssi may be non-nil even when peripheral.rssi is nil??
+        let userInfo: [String: Any] = ["central" : central,
+                                       "peripheral" : peripheral,
+                                       "advertisementData" : advertisementData,
+                                       "rssi" : rssi]
+
+        postDidRefresh(notificationCenter: self.notificationCenter, userInfo: userInfo)
+    }
+
+    // MARK: - post notifications
+
     /// Uses dependency injection
     /// - Parameter notificationCenter
-    func postDidRefresh(notificationCenter: NotificationCenter?) {
+    func postDidRefresh(notificationCenter: NotificationCenter?, userInfo: [String: Any]?) {
         guard let nc = notificationCenter else {
             return
         }
         nc.post(name: BLEDiscoveryConstants.didRefreshNotification,
                 object: self,
-                userInfo: nil)
+                userInfo: userInfo)
     }
 
     /// Uses dependency injection
     /// - Parameter notificationCenter
-    func postPoweredOff(notificationCenter: NotificationCenter?) {
+    func postPoweredOff(notificationCenter: NotificationCenter?, userInfo: [String: Any]?) {
         guard let nc = notificationCenter else {
             return
         }
         nc.post(name: BLEDiscoveryConstants.statePoweredOffNotification,
                 object: self,
-                userInfo: nil)
+                userInfo: userInfo)
     }
 
     func clearDevices() {

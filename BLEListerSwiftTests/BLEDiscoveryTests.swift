@@ -64,7 +64,7 @@ class BLEDiscoveryTests: XCTestCase {
                                                        notificationCenter: ncDefault)
 
         // call method under test
-        shared.postDidRefresh(notificationCenter: shared.notificationCenter)
+        shared.postDidRefresh(notificationCenter: shared.notificationCenter, userInfo: nil)
 
         // wait until the expectation is fulfilled
         wait(for: [expectation], timeout: 1.0)
@@ -80,7 +80,7 @@ class BLEDiscoveryTests: XCTestCase {
                                                        notificationCenter: ncDefault)
 
         // call method under test
-        shared.postPoweredOff(notificationCenter: shared.notificationCenter)
+        shared.postPoweredOff(notificationCenter: shared.notificationCenter, userInfo: nil)
 
         // wait until the expectation is fulfilled
         wait(for: [expectation], timeout: 1.0)
