@@ -23,8 +23,11 @@ class MasterViewController: UITableViewController {
 
         navigationItem.leftBarButtonItem = editButtonItem
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        navigationItem.rightBarButtonItem = addButton
+        let scanButton = UIBarButtonItem(barButtonSystemItem: .add,
+                                         target: self,
+                                         action: #selector(safeScanForPeripherals))
+        navigationItem.rightBarButtonItem = scanButton
+
         if let split = splitViewController {
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -91,6 +94,15 @@ class MasterViewController: UITableViewController {
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
+    }
+
+    // MARK: -
+
+    func safeScanForPeripherals() {
+        guard let discovery = self.bleDiscovery else {
+            return
+        }
+        discovery.safeScanForPeripherals(withServices: nil, options:nil)
     }
 
 
