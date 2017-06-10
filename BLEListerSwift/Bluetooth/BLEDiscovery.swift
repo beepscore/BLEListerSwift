@@ -53,6 +53,53 @@ class BLEDiscovery: NSObject {
         self.connectedServices = connectedServices
         self.notificationCenter = notificationCenter
     }
+
+
+    // MARK: - Discovery
+
+    /// safe method only scans if powered on
+    /// https://developer.apple.com/documentation/corebluetooth/cbcentralmanager/1518986-scanforperipherals
+    func safeScanForPeripherals(withServices serviceUUIDs: [CBUUID]?,
+                                options: [String : Any]? = nil) {
+        guard let cm = self.centralManager else {
+            return
+        }
+        cm.safeScanForPeripherals(withServices: serviceUUIDs, options: options)
+    }
+
+//    func startScanningForUUIDString(uuidString: String) {
+//        guard let cm = self.centralManager else {
+//            return
+//        }
+//
+//        let options = [CBCentralManagerScanOptionAllowDuplicatesKey: false]
+//
+//        if uuidString.isEmpty {
+//            // BLE requires device, not simulator
+//            // If running simulator, app crashes here with "bad access".
+//            // Also Apple says services argument nil works, but is not recommended.
+//            cm.safeScanForPeripherals(withServices: nil, options: options)
+//        } else {
+//            let uuid = CBUUID(string: uuidString)
+//            let uuids = [uuid]
+//
+//            // NOTE: scanForPeripheralsWithServices:options:
+//            // services is array of CBUUID not NSUUID
+//            // Applications that have specified the bluetooth-central background mode
+//            // are allowed to scan while backgrounded, with two caveats:
+//            // the scan must specify one or more service types in serviceUUIDs,
+//            // and the CBCentralManagerScanOptionAllowDuplicatesKey scan option will be ignored.
+//            cm.safeScanForPeripherals(withServices: uuids, options: options)
+//        }
+//    }
+//
+//    func stopScan() {
+//        guard let cm = self.centralManager else {
+//            return
+//        }
+//        cm.stopScan()
+//    }
+
 }
 
 extension BLEDiscovery: CBCentralManagerDelegate {
