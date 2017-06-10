@@ -75,6 +75,8 @@ class BLEDiscovery: NSObject {
         cm.safeScanForPeripherals(withServices: serviceUUIDs, options: options)
 
         // stop scan after timeout
+        // This stops generating callbacks to CBCentralManagerDelegate method
+        // central manager didDiscover peripheral, advertisementData, rssi
         // https://stackoverflow.com/questions/24007518/how-can-i-use-nstimer-in-swift#24007862
         let _ = Timer.scheduledTimer(timeInterval: 4.0,
                                      target: self,
