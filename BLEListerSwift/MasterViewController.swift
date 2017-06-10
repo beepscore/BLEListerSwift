@@ -11,15 +11,16 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var objects = [Any]()
 
     var bleDiscovery: BLEDiscovery? = nil
 
     override func viewDidLoad() {
+        print("viewDidLoad")
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
         bleDiscovery = BLEDiscovery.shared
+        registerForBleDiscoveryDidRefreshNotification()
 
         navigationItem.leftBarButtonItem = editButtonItem
 
@@ -45,20 +46,24 @@ class MasterViewController: UITableViewController {
     }
 
     // TODO: change or delete this method, currently not used
-    func insertNewObject(_ sender: Any) {
-        objects.insert(NSDate(), at: 0)
-        let indexPath = IndexPath(row: 0, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
-    }
+//    func insertNewObject(_ sender: Any) {
+//        objects.insert(NSDate(), at: 0)
+//        let indexPath = IndexPath(row: 0, section: 0)
+//        tableView.insertRows(at: [indexPath], with: .automatic)
+//    }
 
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        guard let discovery = self.bleDiscovery else {
+            return
+        }
+
         if segue.identifier == "showDetail" {
             if let indexPath = tableView.indexPathForSelectedRow {
-                let object = objects[indexPath.row] as! NSDate
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
+                controller.detailItem = discovery.foundPeripherals[indexPath.row].description
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -72,14 +77,21 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objects.count
+        guard let discovery = self.bleDiscovery else {
+            return 0
+        }
+        return discovery.foundPeripherals.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
-        let object = objects[indexPath.row] as! NSDate
-        cell.textLabel!.text = object.description
+        guard let discovery = self.bleDiscovery else {
+            cell.textLabel!.text = "error bleDiscovery nil"
+            return cell
+        }
+        cell.textLabel!.text = discovery.foundPeripherals[indexPath.row].name
+        //cell.detailTextLabel!.text = String(describing: discovery.foundPeripherals[indexPath.row].rssi)
         return cell
     }
 
@@ -89,11 +101,15 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+
+        if bleDiscovery?.foundPeripherals == nil {
+            return
+        }
+
         if editingStyle == .delete {
-            objects.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+            // remove from model object, not from a copy
+            //bleDiscovery!.foundPeripherals!.remove(at: indexPath.row)
+            //tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
 
@@ -103,9 +119,33 @@ class MasterViewController: UITableViewController {
         guard let discovery = self.bleDiscovery else {
             return
         }
-        discovery.safeScanForPeripherals(withServices: nil, options:nil)
+        discovery.safeScanForPeripherals()
     }
 
+    // MARK: - Register for notifications
+
+    func registerForBleDiscoveryDidRefreshNotification() {
+        guard let nc = bleDiscovery?.notificationCenter else {
+            return
+        }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidRefreshWithNotification(_:)),
+                       name:BLEDiscoveryConstants.didRefreshNotification,
+                       object:nil)
+    }
+
+    // MARK: - Notification response methods
+
+    func discoveryDidRefreshWithNotification(_ notification: NSNotification) {
+        print("MasterViewController discoveryDidRefreshWithNotification")
+        print("notification.object: " + String(describing: notification.object))
+
+        if notification.userInfo != nil {
+            print("notification.userInfo" + String(describing:notification.userInfo))
+        }
+        tableView.reloadData()
+    }
 
 }
 

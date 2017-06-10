@@ -17,7 +17,7 @@ struct BLEDiscoveryConstants {
 class BLEDiscovery: NSObject {
 
     var centralManager: CBCentralManager? = nil
-    var foundPeripherals: [CBPeripheral]? = []
+    var foundPeripherals: [CBPeripheral] = []
     var connectedServices: [CBService]? = []
     var notificationCenter: NotificationCenter? = nil
 
@@ -65,12 +65,22 @@ class BLEDiscovery: NSObject {
 
     /// safe method only scans if powered on
     /// https://developer.apple.com/documentation/corebluetooth/cbcentralmanager/1518986-scanforperipherals
-    func safeScanForPeripherals(withServices serviceUUIDs: [CBUUID]?,
-                                options: [String : Any]? = nil) {
+    func safeScanForPeripherals() {
+        print("safeScanForPeripherals")
         guard let cm = self.centralManager else {
             return
         }
+        let serviceUUIDs: [CBUUID]? = nil
+        let options = [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         cm.safeScanForPeripherals(withServices: serviceUUIDs, options: options)
+
+        // stop scan after timeout
+        // https://stackoverflow.com/questions/24007518/how-can-i-use-nstimer-in-swift#24007862
+        let _ = Timer.scheduledTimer(timeInterval: 4.0,
+                                     target: self,
+                                     selector: #selector(stopScan),
+                                     userInfo: nil,
+                                     repeats: false)
     }
 
 //    func startScanningForUUIDString(uuidString: String) {
@@ -98,13 +108,13 @@ class BLEDiscovery: NSObject {
 //            cm.safeScanForPeripherals(withServices: uuids, options: options)
 //        }
 //    }
-//
-//    func stopScan() {
-//        guard let cm = self.centralManager else {
-//            return
-//        }
-//        cm.stopScan()
-//    }
+
+    func stopScan() {
+        guard let cm = self.centralManager else {
+            return
+        }
+        cm.stopScan()
+    }
 
 }
 
@@ -112,6 +122,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
 
+        print("centralManagerDidUpdateState")
         print(String(describing:central) + "central.state: " + String(describing:central.state))
 
         switch central.state {
@@ -166,7 +177,16 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                         advertisementData: [String: Any],
                         rssi: NSNumber) {
 
+        print("centralManager didDiscover")
+        print("foundPeripherals.count " + (String(describing: foundPeripherals.count)))
+        if peripheral.name == nil {
+            return
+        }
+        print(foundPeripherals.description)
         // self.updatePeripherals(peripheral: peripheral)
+        if !(foundPeripherals.contains(peripheral)) {
+            foundPeripherals.append(peripheral)
+        }
 
         // Argument rssi may be non-nil even when peripheral.rssi is nil??
         let userInfo: [String: Any] = ["central" : central,
@@ -174,7 +194,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                                        "advertisementData" : advertisementData,
                                        "rssi" : rssi]
 
-        postDidRefresh(notificationCenter: self.notificationCenter, userInfo: userInfo)
+        postDidRefresh(notificationCenter: notificationCenter, userInfo: userInfo)
     }
 
     // MARK: - post notifications
@@ -211,5 +231,5 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         // FIXME: implement
         //
     }
-    
+
 }

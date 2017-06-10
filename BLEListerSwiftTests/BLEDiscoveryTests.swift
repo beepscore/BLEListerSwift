@@ -91,7 +91,7 @@ class BLEDiscoveryTests: XCTestCase {
 
         shared.clearDevices()
 
-        XCTAssertEqual(shared.foundPeripherals!, [])
+        XCTAssertEqual(shared.foundPeripherals, [])
         XCTAssertEqual(shared.connectedServices!, [])
     }
 }
