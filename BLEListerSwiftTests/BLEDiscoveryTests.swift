@@ -27,6 +27,11 @@ class BLEDiscoveryTests: XCTestCase {
         XCTAssertNotNil(shared.centralManager)
     }
 
+    func testSharedCentralManagerDelegate () {
+        let shared = BLEDiscovery.shared
+        XCTAssertNotNil(shared.centralManager!.delegate)
+    }
+
     func testSharedFoundPeripherals () {
         let shared = BLEDiscovery.shared
         XCTAssertNotNil(shared.foundPeripherals)
