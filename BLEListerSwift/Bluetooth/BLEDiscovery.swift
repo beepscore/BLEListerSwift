@@ -29,8 +29,10 @@ class BLEDiscovery: NSObject {
     // https://stackoverflow.com/questions/37953317/singleton-with-properties-in-swift-3
     static let shared: BLEDiscovery = {
 
+        // self isn't complete yet, so at first set CBCentralManagerDelegate to nil
+        // later code should set delegate to self
         // queue nil uses main queue
-        let cm = CBCentralManager(delegate: self as? CBCentralManagerDelegate, queue: nil)
+        let cm = CBCentralManager(delegate: nil, queue: nil)
 
         let instance = BLEDiscovery(withCentralManager: cm,
                                     foundPeripherals: [CBPeripheral](),
@@ -48,7 +50,11 @@ class BLEDiscovery: NSObject {
                  foundPeripherals: [CBPeripheral],
                  connectedServices: [CBService],
                  notificationCenter: NotificationCenter) {
+        super.init()
+
         self.centralManager = centralManager
+        self.centralManager?.delegate = self
+
         self.foundPeripherals = foundPeripherals
         self.connectedServices = connectedServices
         self.notificationCenter = notificationCenter
