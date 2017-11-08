@@ -115,7 +115,7 @@ class MasterViewController: UITableViewController {
 
     // MARK: -
 
-    func safeScanForPeripherals(_ sender: Any) {
+    @objc func safeScanForPeripherals(_ sender: Any) {
         guard let discovery = self.bleDiscovery else {
             return
         }
@@ -137,7 +137,7 @@ class MasterViewController: UITableViewController {
 
     // MARK: - Notification response methods
 
-    func discoveryDidRefreshWithNotification(_ notification: NSNotification) {
+    @objc func discoveryDidRefreshWithNotification(_ notification: NSNotification) {
         print("MasterViewController discoveryDidRefreshWithNotification")
         print("notification.object: " + String(describing: notification.object))
 

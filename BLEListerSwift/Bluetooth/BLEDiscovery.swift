@@ -111,7 +111,7 @@ class BLEDiscovery: NSObject {
 //        }
 //    }
 
-    func stopScan() {
+    @objc func stopScan() {
         guard let cm = self.centralManager else {
             return
         }
