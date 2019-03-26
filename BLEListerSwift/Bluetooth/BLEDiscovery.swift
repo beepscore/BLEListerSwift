@@ -169,6 +169,9 @@ extension BLEDiscovery: CBCentralManagerDelegate {
             //                [central connectPeripheral:peripheral options:nil];
             //            }
             self.postDidRefresh(notificationCenter: self.notificationCenter, userInfo: nil)
+
+        @unknown default:
+            break
         }
 
         isFirstRun = false
