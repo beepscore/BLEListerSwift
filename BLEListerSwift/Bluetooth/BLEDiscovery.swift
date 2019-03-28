@@ -9,12 +9,12 @@
 import Foundation
 import CoreBluetooth
 
-struct BLEDiscoveryConstants {
-    static let didRefreshNotification = NSNotification.Name(rawValue: "didRefreshNotification")
-    static let statePoweredOffNotification = NSNotification.Name(rawValue: "statePoweredOffNotification")
-}
-
 class BLEDiscovery: NSObject {
+
+    enum Notification: String {
+        case didRefresh = "BLEDiscoveryDidRefresh"
+        case statePoweredOff = "BLEDiscoveryStatePoweredOff"
+    }
 
     var centralManager: CBCentralManager? = nil
     var foundPeripherals: [CBPeripheral] = []
@@ -210,7 +210,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         guard let nc = notificationCenter else {
             return
         }
-        nc.post(name: BLEDiscoveryConstants.didRefreshNotification,
+        nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
                 object: self,
                 userInfo: userInfo)
     }
@@ -221,7 +221,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         guard let nc = notificationCenter else {
             return
         }
-        nc.post(name: BLEDiscoveryConstants.statePoweredOffNotification,
+        nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.statePoweredOff.rawValue),
                 object: self,
                 userInfo: userInfo)
     }

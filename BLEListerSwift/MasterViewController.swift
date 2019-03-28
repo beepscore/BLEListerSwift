@@ -131,7 +131,7 @@ class MasterViewController: UITableViewController {
 
         nc.addObserver(self,
                        selector:#selector(discoveryDidRefreshWithNotification(_:)),
-                       name:BLEDiscoveryConstants.didRefreshNotification,
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
                        object:nil)
     }
 
