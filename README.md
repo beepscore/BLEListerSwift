@@ -1,4 +1,4 @@
-﻿# Purpose
+# Purpose
 BLEListerSwift is an iOS application that lists Bluetooth Low Energy devices.
 
 # App Requirements
@@ -32,3 +32,8 @@ https://e2e.ti.com/support/wireless_connectivity/f/538/t/199289
 
 # Results
 
+## Unit tests
+At one point unit tests quickly exited and failed with log message:
+"xcode failed to establish communication with the test runner".
+Fixed this by turning iPhone off and then on.
+https://stackoverflow.com/questions/53643318/xctests-canceling-prematurely
