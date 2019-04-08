@@ -12,21 +12,16 @@ import CoreBluetooth
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var identifierLabel: UILabel!
+    @IBOutlet weak var rssiLabel: UILabel!
 
-
-    func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = detailItem {
-            if let label = detailDescriptionLabel {
-                label.text = detail.description
-            }
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         configureView()
+
+        // TODO: scan for services, show them
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,6 +33,17 @@ class DetailViewController: UIViewController {
         didSet {
             // Update the view.
             configureView()
+        }
+    }
+
+    func configureView() {
+        // Update the user interface for the detail item.
+        if let detail = detailItem {
+            title = detail.name
+            if let label = detailDescriptionLabel {
+                label.text = detail.services.debugDescription
+                identifierLabel.text = detail.identifier.debugDescription
+            }
         }
     }
 
