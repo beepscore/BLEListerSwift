@@ -13,6 +13,7 @@
 		DE4248051EEA3905001BFE21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE4248031EEA3905001BFE21 /* Main.storyboard */; };
 		DE4248071EEA3905001BFE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE4248061EEA3905001BFE21 /* Assets.xcassets */; };
 		DE42480A1EEA3905001BFE21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE4248081EEA3905001BFE21 /* LaunchScreen.storyboard */; };
+		DE5B4700225BBB86006B8264 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5B46FF225BBB86006B8264 /* Logger.swift */; };
 		DE6561941EEA514400E0A0B5 /* MasterViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */; };
 		DE6561961EEA56A700E0A0B5 /* BLEDiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */; };
 		DE827D351EEB661000E45D64 /* CBCentralManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE827D341EEB661000E45D64 /* CBCentralManagerExtension.swift */; };
@@ -40,6 +41,7 @@
 		DE42480B1EEA3905001BFE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE4248101EEA3906001BFE21 /* BLEListerSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BLEListerSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE4248161EEA3906001BFE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE5B46FF225BBB86006B8264 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		DE6561931EEA514400E0A0B5 /* MasterViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewControllerTests.swift; sourceTree = "<group>"; };
 		DE6561951EEA56A700E0A0B5 /* BLEDiscoveryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDiscoveryTests.swift; sourceTree = "<group>"; };
 		DE827D341EEB661000E45D64 /* CBCentralManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBCentralManagerExtension.swift; path = Bluetooth/CBCentralManagerExtension.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			children = (
 				DEF60ED21EEA45C3001D1E73 /* Bluetooth */,
 				DE4247FD1EEA3905001BFE21 /* AppDelegate.swift */,
+				DE5B46FF225BBB86006B8264 /* Logger.swift */,
 				DE4247FF1EEA3905001BFE21 /* MasterViewController.swift */,
 				DE4248011EEA3905001BFE21 /* DetailViewController.swift */,
 				DE4248031EEA3905001BFE21 /* Main.storyboard */,
@@ -226,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE827D351EEB661000E45D64 /* CBCentralManagerExtension.swift in Sources */,
+				DE5B4700225BBB86006B8264 /* Logger.swift in Sources */,
 				DEF60ED41EEA461A001D1E73 /* BLEDiscovery.swift in Sources */,
 				DE4248021EEA3905001BFE21 /* DetailViewController.swift in Sources */,
 				DE4248001EEA3905001BFE21 /* MasterViewController.swift in Sources */,
