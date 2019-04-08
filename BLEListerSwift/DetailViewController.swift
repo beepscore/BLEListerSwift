@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreBluetooth
 
 class DetailViewController: UIViewController {
 
@@ -33,7 +34,7 @@ class DetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    var detailItem: String? {
+    var detailItem: CBPeripheral? {
         didSet {
             // Update the view.
             configureView()
