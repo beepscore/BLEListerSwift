@@ -7,15 +7,16 @@
 //
 
 import UIKit
+import os.log
 
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-
     var bleDiscovery: BLEDiscovery? = nil
 
     override func viewDidLoad() {
-        print("viewDidLoad")
+        os_log("viewDidLoad", log: Logger.shared.log, type: .debug)
+
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
@@ -138,11 +139,19 @@ class MasterViewController: UITableViewController {
     // MARK: - Notification response methods
 
     @objc func discoveryDidRefreshWithNotification(_ notification: NSNotification) {
-        print("MasterViewController discoveryDidRefreshWithNotification")
-        print("notification.object: " + String(describing: notification.object))
+        os_log("MasterViewController discoveryDidRefreshWithNotification",
+               log: Logger.shared.log,
+               type: .debug)
+        os_log("notification.object: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing: notification.object))
 
         if notification.userInfo != nil {
-            print("notification.userInfo" + String(describing:notification.userInfo))
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
         }
         tableView.reloadData()
     }
