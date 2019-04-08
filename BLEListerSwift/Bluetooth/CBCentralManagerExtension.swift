@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreBluetooth
+import os.log
 
 public extension CBCentralManager {
 
@@ -18,10 +19,14 @@ public extension CBCentralManager {
     func safeScanForPeripherals(withServices serviceUUIDs: [CBUUID]?,
                                 options: [String : Any]? = nil) {
         if self.state != .poweredOn {
-            print("CBCentralManager not powered on, didn't scan.")
+            os_log("CBCentralManager not powered on, didn't scan.",
+                   log: Logger.shared.log,
+                   type: .debug)
             return
         }
-        print("CBCentralManager powered on, calling scanForPeripheralsWithServices.")
+        os_log("CBCentralManager powered on, calling scanForPeripheralsWithServices.",
+               log: Logger.shared.log,
+               type: .debug)
         self.scanForPeripherals(withServices: serviceUUIDs, options: options)
     }
 
