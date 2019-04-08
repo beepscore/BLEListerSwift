@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreBluetooth
+import os.log
 
 class BLEDiscovery: NSObject {
 
@@ -66,7 +67,8 @@ class BLEDiscovery: NSObject {
     /// safe method only scans if powered on
     /// https://developer.apple.com/documentation/corebluetooth/cbcentralmanager/1518986-scanforperipherals
     func safeScanForPeripherals() {
-        print("safeScanForPeripherals")
+        os_log("safeScanForPeripherals", log: Logger.shared.log, type: .debug)
+
         guard let cm = self.centralManager else {
             return
         }
@@ -124,8 +126,12 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
 
-        print("centralManagerDidUpdateState")
-        print(String(describing:central) + "central.state: " + String(describing:central.state))
+        os_log("centralManagerDidUpdateState", log: Logger.shared.log, type: .debug)
+        os_log("central: %@ state: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:central),
+               String(describing:central.state))
 
         switch central.state {
 
@@ -182,12 +188,17 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                         advertisementData: [String: Any],
                         rssi: NSNumber) {
 
-        print("centralManager didDiscover")
-        print("foundPeripherals.count " + (String(describing: foundPeripherals.count)))
+        os_log("centralManager didDiscover", log: Logger.shared.log, type: .debug)
+        os_log("foundPeripherals.count: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing: foundPeripherals.count))
+
         if peripheral.name == nil {
             return
         }
-        print(foundPeripherals.description)
+        os_log("%@", log: Logger.shared.log, type: .debug,
+               foundPeripherals.description)
         // self.updatePeripherals(peripheral: peripheral)
         if !(foundPeripherals.contains(peripheral)) {
             foundPeripherals.append(peripheral)
