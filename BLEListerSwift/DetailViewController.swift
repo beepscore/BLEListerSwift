@@ -26,6 +26,7 @@ class DetailViewController: UIViewController {
         bleDiscovery = BLEDiscovery.shared
         registerForBleDiscoveryDidConnectPeripheralNotification()
         registerForBleDiscoveryDidDisconnectPeripheralNotification()
+        registerForBleDiscoveryDidDiscoverServicesNotification()
 
         configureView()
 
@@ -123,6 +124,17 @@ class DetailViewController: UIViewController {
                        object:nil)
     }
 
+    func registerForBleDiscoveryDidDiscoverServicesNotification() {
+        guard let nc = bleDiscovery?.notificationCenter else {
+            return
+        }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidDiscoverServicesWithNotification(_:)),
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverServices.rawValue),
+                       object:nil)
+    }
+
     // MARK: - Notification response methods
 
     @objc func discoveryDidConnectPeripheralWithNotification(_ notification: NSNotification) {
@@ -135,12 +147,14 @@ class DetailViewController: UIViewController {
                String(describing: notification.object))
 
         if notification.userInfo != nil {
-            os_log("notification.userInfo: %@",
-                   log: Logger.shared.log,
-                   type: .debug,
-                   String(describing:notification.userInfo))
+            if ((notification.userInfo?["peripheral"]) != nil) {
+                os_log("notification.userInfo: %@",
+                       log: Logger.shared.log,
+                       type: .debug,
+                       String(describing:notification.userInfo))
+                configureView()
+            }
         }
-        configureView()
     }
 
     @objc func discoveryDidDisconnectPeripheralWithNotification(_ notification: NSNotification) {
@@ -153,14 +167,33 @@ class DetailViewController: UIViewController {
                String(describing: notification.object))
 
         if notification.userInfo != nil {
+            if ((notification.userInfo?["peripheral"]) != nil) {
+                os_log("notification.userInfo: %@",
+                       log: Logger.shared.log,
+                       type: .debug,
+                       String(describing:notification.userInfo))
+                configureView()
+            }
+        }
+    }
+
+    @objc func discoveryDidDiscoverServicesWithNotification(_ notification: NSNotification) {
+        os_log("DetailViewController discoveryDidDiscoverServicesWithNotification",
+               log: Logger.shared.log,
+               type: .debug)
+        os_log("notification.object: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing: notification.object))
+
+        if ((notification.userInfo?["peripheral"]) != nil) {
             os_log("notification.userInfo: %@",
                    log: Logger.shared.log,
                    type: .debug,
                    String(describing:notification.userInfo))
+            configureView()
         }
-        configureView()
     }
-
 
 }
 

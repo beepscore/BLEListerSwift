@@ -17,6 +17,7 @@ class BLEDiscovery: NSObject {
         case statePoweredOff = "statePoweredOff"
         case didConnectPeripheral = "didConnectPeripheral"
         case didDisconnectPeripheral = "didDisconnectPeripheral"
+        case didDiscoverServices = "didDiscoverServices"
     }
 
     var centralManager: CBCentralManager? = nil
@@ -188,6 +189,17 @@ class BLEDiscovery: NSObject {
         }
     }
 
+    func postDidDiscoverServices(notificationCenter: NotificationCenter?,
+                                     userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverServices.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
     func clearDevices() {
         self.foundPeripherals = []
         // TODO: reset each service before removing it? Reference Apple TemperatureSensor project
@@ -273,13 +285,12 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                type: .debug,
                String(describing: foundPeripherals.count))
 
-        if peripheral.name == nil {
-            return
-        }
         os_log("%@", log: Logger.shared.log, type: .debug,
                foundPeripherals.description)
-        // self.updatePeripherals(peripheral: peripheral)
-        if !(foundPeripherals.contains(peripheral)) {
+
+        // checking peripheral.name != nil prevents blank appearing rows in table view
+        if peripheral.name != nil && !(foundPeripherals.contains(peripheral)) {
+            peripheral.delegate = self as CBPeripheralDelegate
             foundPeripherals.append(peripheral)
         }
 
@@ -299,7 +310,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         postDidConnectPeripheral(notificationCenter: notificationCenter,
                                  userInfo: userInfo)
         
-        //peripheral.delegate = self as! CBPeripheralDelegate
+        peripheral.delegate = self as CBPeripheralDelegate
 
         // TODO: consider call readRSSI
         // must be connected to call readRSSI
@@ -307,9 +318,8 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         // readRSSI calls back delegate method peripheral:didReadRSSI:error:
         // peripheral.readRSSI()
 
-        //TODO: consider call discoverServices
         // discoverServices calls back delegate method peripheral:didDiscoverServices:
-        //peripheral.discoverServices()
+        peripheral.discoverServices(nil)
     }
 
     func centralManager(_ central: CBCentralManager,
@@ -333,5 +343,20 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 extension BLEDiscovery: CBPeripheralDelegate {
 // MARK: - CBPeripheralDelegate
 // CBPeripheralDelegate has no required methods
-// https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.html
+// https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.htm
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices: Error?) {
+
+        if let error = didDiscoverServices {
+            os_log("peripheral didDiscoverServices error: %@",
+                   log: Logger.shared.log,
+                   type: .error,
+                   error.localizedDescription)
+        }
+        let userInfo: [String: Any] = ["peripheral": peripheral]
+        postDidDiscoverServices(notificationCenter: notificationCenter,
+                                userInfo: userInfo)
+
+    }
+
 }
