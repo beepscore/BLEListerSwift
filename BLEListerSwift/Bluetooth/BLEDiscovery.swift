@@ -341,7 +341,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 }
 
 extension BLEDiscovery: CBPeripheralDelegate {
-// MARK: - CBPeripheralDelegate
+// MARK: CBPeripheralDelegate
 // CBPeripheralDelegate has no required methods
 // https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.htm
 

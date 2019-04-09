@@ -136,7 +136,7 @@ class MasterViewController: UITableViewController {
                        object:nil)
     }
 
-    // MARK: - Notification response methods
+    // MARK: - Notification handlers
 
     @objc func discoveryDidRefreshWithNotification(_ notification: NSNotification) {
         os_log("MasterViewController discoveryDidRefreshWithNotification",

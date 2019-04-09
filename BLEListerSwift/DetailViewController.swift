@@ -135,7 +135,7 @@ class DetailViewController: UIViewController {
                        object:nil)
     }
 
-    // MARK: - Notification response methods
+    // MARK: - Notification handlers
 
     @objc func discoveryDidConnectPeripheralWithNotification(_ notification: NSNotification) {
         os_log("DetailViewController discoveryDidConnectPeripheralWithNotification",
