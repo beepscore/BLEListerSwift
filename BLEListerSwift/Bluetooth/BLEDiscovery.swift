@@ -13,8 +13,9 @@ import os.log
 class BLEDiscovery: NSObject {
 
     enum Notification: String {
-        case didRefresh = "BLEDiscoveryDidRefresh"
-        case statePoweredOff = "BLEDiscoveryStatePoweredOff"
+        case didRefresh = "didRefresh"
+        case statePoweredOff = "statePoweredOff"
+        case didConnectPeripheral = "didConnectPeripheral"
     }
 
     var centralManager: CBCentralManager? = nil
@@ -139,6 +140,7 @@ class BLEDiscovery: NSObject {
 }
 
 extension BLEDiscovery: CBCentralManagerDelegate {
+    // MARK: CBCentralManagerDelegate
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
 
@@ -229,28 +231,69 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         postDidRefresh(notificationCenter: notificationCenter, userInfo: userInfo)
     }
 
+    func centralManager(_ central: CBCentralManager,
+                        didConnect peripheral: CBPeripheral) {
+
+        let userInfo: [String: Any] = ["peripheral": peripheral]
+        postDidConnectPeripheral(notificationCenter: notificationCenter,
+                                 userInfo: userInfo)
+        
+        //peripheral.delegate = self as! CBPeripheralDelegate
+
+        // TODO: consider call readRSSI
+        // must be connected to call readRSSI
+        // could set timer to repeatedly call readRSSI
+        // readRSSI calls back delegate method peripheral:didReadRSSI:error:
+        // peripheral.readRSSI()
+
+        //TODO: consider call discoverServices
+        // discoverServices calls back delegate method peripheral:didDiscoverServices:
+        //peripheral.discoverServices()
+    }
+
+    // MARK: - CBPeripheralDelegate
+    // CBPeripheralDelegate has no required methods
+    // https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.html
+
+
     // MARK: - post notifications
+    // TODO: implement methods
 
     /// Uses dependency injection
     /// - Parameter notificationCenter
-    func postDidRefresh(notificationCenter: NotificationCenter?, userInfo: [String: Any]?) {
-        guard let nc = notificationCenter else {
-            return
+    func postDidRefresh(notificationCenter: NotificationCenter?,
+                        userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
+                    object: self,
+                    userInfo: userInfo)
         }
-        nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
-                object: self,
-                userInfo: userInfo)
     }
 
     /// Uses dependency injection
     /// - Parameter notificationCenter
-    func postPoweredOff(notificationCenter: NotificationCenter?, userInfo: [String: Any]?) {
-        guard let nc = notificationCenter else {
-            return
+    func postPoweredOff(notificationCenter: NotificationCenter?,
+                        userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.statePoweredOff.rawValue),
+                    object: self,
+                    userInfo: userInfo)
         }
-        nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.statePoweredOff.rawValue),
-                object: self,
-                userInfo: userInfo)
+    }
+
+    func postDidConnectPeripheral(notificationCenter: NotificationCenter?,
+                                  userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
     }
 
     func clearDevices() {

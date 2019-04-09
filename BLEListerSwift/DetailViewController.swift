@@ -8,17 +8,24 @@
 
 import UIKit
 import CoreBluetooth
+import os.log
 
 class DetailViewController: UIViewController {
 
+    var bleDiscovery: BLEDiscovery?
+    
     @IBOutlet weak var detailDescriptionLabel: UILabel!
     @IBOutlet weak var identifierLabel: UILabel!
     @IBOutlet weak var rssiLabel: UILabel!
 
+    @IBOutlet weak var connectButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        bleDiscovery = BLEDiscovery.shared
+        registerForBleDiscoveryDidConnectPeripheralNotification()
+
         configureView()
 
         // TODO: scan for services, show them
@@ -36,15 +43,92 @@ class DetailViewController: UIViewController {
         }
     }
 
+    /// Update the user interface for the detail item
     func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = detailItem {
-            title = detail.name
+        if let peripheral = detailItem {
+            title = peripheral.name
             if let label = detailDescriptionLabel {
-                label.text = detail.services.debugDescription
-                identifierLabel.text = detail.identifier.debugDescription
+                label.text = peripheral.services.debugDescription
+            }
+            if let identifierLabel = identifierLabel {
+                identifierLabel.text = peripheral.identifier.debugDescription
+            }
+            if let connectButton = connectButton {
+                let buttonTitle = connectLabelTextForState(peripheral.state)
+                connectButton.setTitle(buttonTitle, for: .normal)
             }
         }
+    }
+
+    func connectLabelTextForState(_ state: CBPeripheralState) -> String {
+        var connectLabelText = ""
+        switch (state) {
+
+        case .disconnected:
+            connectLabelText = "Connect"
+        case .connecting:
+            connectLabelText = ""
+        case .connected:
+            connectLabelText = "Disconnect"
+        default:
+            connectLabelText = ""
+        }
+
+        return connectLabelText;
+    }
+
+    // MARK: - Connect / Disconnect
+
+    @IBAction func connectTapped(sender: Any) {
+        guard let discovery = bleDiscovery, let peripheral = detailItem else { return }
+        if detailItem?.state == .disconnected {
+            connect(discovery: discovery, peripheral: peripheral)
+        } else if detailItem?.state == .connected {
+            disconnect(discovery: discovery, peripheral: peripheral);
+        }
+        // update UI based on detailItem state
+        configureView();
+    }
+
+    func connect(discovery: BLEDiscovery, peripheral: CBPeripheral) {
+        discovery.connectPeripheral(peripheral: peripheral)
+    }
+
+    func disconnect(discovery: BLEDiscovery, peripheral: CBPeripheral) {
+        discovery.disconnectPeripheral(peripheral: peripheral)
+    }
+
+    // MARK: - Register for notifications
+
+    func registerForBleDiscoveryDidConnectPeripheralNotification() {
+        guard let nc = bleDiscovery?.notificationCenter else {
+            return
+        }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidConnectPeripheralWithNotification(_:)),
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
+                       object:nil)
+    }
+
+    // MARK: - Notification response methods
+
+    @objc func discoveryDidConnectPeripheralWithNotification(_ notification: NSNotification) {
+        os_log("DetailViewController discoveryDidConnectPeripheralWithNotification",
+               log: Logger.shared.log,
+               type: .debug)
+        os_log("notification.object: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing: notification.object))
+
+        if notification.userInfo != nil {
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
+        }
+        configureView()
     }
 
 
