@@ -126,9 +126,7 @@ class MasterViewController: UITableViewController {
     // MARK: - Register for notifications
 
     func registerForBleDiscoveryDidRefreshNotification() {
-        guard let nc = bleDiscovery?.notificationCenter else {
-            return
-        }
+        guard let nc = bleDiscovery?.notificationCenter else { return }
 
         nc.addObserver(self,
                        selector:#selector(discoveryDidRefreshWithNotification(_:)),

@@ -103,9 +103,7 @@ class DetailViewController: UIViewController {
     // MARK: - Register for notifications
 
     func registerForBleDiscoveryDidConnectPeripheralNotification() {
-        guard let nc = bleDiscovery?.notificationCenter else {
-            return
-        }
+        guard let nc = bleDiscovery?.notificationCenter else { return }
 
         nc.addObserver(self,
                        selector:#selector(discoveryDidConnectPeripheralWithNotification(_:)),
@@ -114,9 +112,7 @@ class DetailViewController: UIViewController {
     }
 
     func registerForBleDiscoveryDidDisconnectPeripheralNotification() {
-        guard let nc = bleDiscovery?.notificationCenter else {
-            return
-        }
+        guard let nc = bleDiscovery?.notificationCenter else { return }
 
         nc.addObserver(self,
                        selector:#selector(discoveryDidDisconnectPeripheralWithNotification(_:)),
@@ -125,9 +121,7 @@ class DetailViewController: UIViewController {
     }
 
     func registerForBleDiscoveryDidDiscoverServicesNotification() {
-        guard let nc = bleDiscovery?.notificationCenter else {
-            return
-        }
+        guard let nc = bleDiscovery?.notificationCenter else { return }
 
         nc.addObserver(self,
                        selector:#selector(discoveryDidDiscoverServicesWithNotification(_:)),
