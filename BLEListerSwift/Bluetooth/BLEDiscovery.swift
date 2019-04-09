@@ -138,6 +138,66 @@ class BLEDiscovery: NSObject {
         cm.cancelPeripheralConnection(peripheral)
     }
 
+    // MARK: - post notifications
+
+    /// Uses dependency injection
+    /// - Parameter notificationCenter
+    func postDidRefresh(notificationCenter: NotificationCenter?,
+                        userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    /// Uses dependency injection
+    /// - Parameter notificationCenter
+    func postPoweredOff(notificationCenter: NotificationCenter?,
+                        userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.statePoweredOff.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    func postDidConnectPeripheral(notificationCenter: NotificationCenter?,
+                                  userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    func postDidDisconnectPeripheral(notificationCenter: NotificationCenter?,
+                                     userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDisconnectPeripheral.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    func clearDevices() {
+        self.foundPeripherals = []
+        // TODO: reset each service before removing it? Reference Apple TemperatureSensor project
+        self.connectedServices = []
+    }
+
+    func loadSavedDevices() {
+        // FIXME: implement
+        //
+    }
 }
 
 extension BLEDiscovery: CBCentralManagerDelegate {
@@ -268,71 +328,10 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                                     userInfo: userInfo)
     }
 
-    // MARK: - CBPeripheralDelegate
-    // CBPeripheralDelegate has no required methods
-    // https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.html
+}
 
-
-    // MARK: - post notifications
-    // TODO: implement methods
-
-    /// Uses dependency injection
-    /// - Parameter notificationCenter
-    func postDidRefresh(notificationCenter: NotificationCenter?,
-                        userInfo: [String: Any]?) {
-        guard let nc = notificationCenter else { return }
-
-        DispatchQueue.main.async {
-            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
-                    object: self,
-                    userInfo: userInfo)
-        }
-    }
-
-    /// Uses dependency injection
-    /// - Parameter notificationCenter
-    func postPoweredOff(notificationCenter: NotificationCenter?,
-                        userInfo: [String: Any]?) {
-        guard let nc = notificationCenter else { return }
-
-        DispatchQueue.main.async {
-            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.statePoweredOff.rawValue),
-                    object: self,
-                    userInfo: userInfo)
-        }
-    }
-
-    func postDidConnectPeripheral(notificationCenter: NotificationCenter?,
-                                  userInfo: [String: Any]?) {
-        guard let nc = notificationCenter else { return }
-
-        DispatchQueue.main.async {
-            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
-                    object: self,
-                    userInfo: userInfo)
-        }
-    }
-
-    func postDidDisconnectPeripheral(notificationCenter: NotificationCenter?,
-                                  userInfo: [String: Any]?) {
-        guard let nc = notificationCenter else { return }
-
-        DispatchQueue.main.async {
-            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDisconnectPeripheral.rawValue),
-                    object: self,
-                    userInfo: userInfo)
-        }
-    }
-
-    func clearDevices() {
-        self.foundPeripherals = []
-        // TODO: reset each service before removing it? Reference Apple TemperatureSensor project
-        self.connectedServices = []
-    }
-    
-    func loadSavedDevices() {
-        // FIXME: implement
-        //
-    }
-
+extension BLEDiscovery: CBPeripheralDelegate {
+// MARK: - CBPeripheralDelegate
+// CBPeripheralDelegate has no required methods
+// https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.html
 }
