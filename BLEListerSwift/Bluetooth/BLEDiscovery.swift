@@ -16,6 +16,7 @@ class BLEDiscovery: NSObject {
         case didRefresh = "didRefresh"
         case statePoweredOff = "statePoweredOff"
         case didConnectPeripheral = "didConnectPeripheral"
+        case didDisconnectPeripheral = "didDisconnectPeripheral"
     }
 
     var centralManager: CBCentralManager? = nil
@@ -251,6 +252,22 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         //peripheral.discoverServices()
     }
 
+    func centralManager(_ central: CBCentralManager,
+                        didDisconnectPeripheral peripheral: CBPeripheral,
+                        error: Error?) {
+
+        if let error = error {
+            os_log("centralManager didDisconnectPeripheral error: %@",
+                   log: Logger.shared.log,
+                   type: .error,
+                   error.localizedDescription)
+        }
+
+        let userInfo: [String: Any] = ["peripheral": peripheral]
+        postDidDisconnectPeripheral(notificationCenter: notificationCenter,
+                                    userInfo: userInfo)
+    }
+
     // MARK: - CBPeripheralDelegate
     // CBPeripheralDelegate has no required methods
     // https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBPeripheralDelegate_Protocol/translated_content/CBPeripheralDelegate.html
@@ -291,6 +308,17 @@ extension BLEDiscovery: CBCentralManagerDelegate {
 
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    func postDidDisconnectPeripheral(notificationCenter: NotificationCenter?,
+                                  userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDisconnectPeripheral.rawValue),
                     object: self,
                     userInfo: userInfo)
         }

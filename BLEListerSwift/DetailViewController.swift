@@ -25,6 +25,7 @@ class DetailViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         bleDiscovery = BLEDiscovery.shared
         registerForBleDiscoveryDidConnectPeripheralNotification()
+        registerForBleDiscoveryDidDisconnectPeripheralNotification()
 
         configureView()
 
@@ -111,10 +112,39 @@ class DetailViewController: UIViewController {
                        object:nil)
     }
 
+    func registerForBleDiscoveryDidDisconnectPeripheralNotification() {
+        guard let nc = bleDiscovery?.notificationCenter else {
+            return
+        }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidDisconnectPeripheralWithNotification(_:)),
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didDisconnectPeripheral.rawValue),
+                       object:nil)
+    }
+
     // MARK: - Notification response methods
 
     @objc func discoveryDidConnectPeripheralWithNotification(_ notification: NSNotification) {
         os_log("DetailViewController discoveryDidConnectPeripheralWithNotification",
+               log: Logger.shared.log,
+               type: .debug)
+        os_log("notification.object: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing: notification.object))
+
+        if notification.userInfo != nil {
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
+        }
+        configureView()
+    }
+
+    @objc func discoveryDidDisconnectPeripheralWithNotification(_ notification: NSNotification) {
+        os_log("DetailViewController discoveryDidDisconnectPeripheralWithNotification",
                log: Logger.shared.log,
                type: .debug)
         os_log("notification.object: %@",
