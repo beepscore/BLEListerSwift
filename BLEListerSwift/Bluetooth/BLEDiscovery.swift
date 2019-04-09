@@ -120,6 +120,22 @@ class BLEDiscovery: NSObject {
         cm.stopScan()
     }
 
+    // MARK: - Connect/Disconnect
+
+    func connectPeripheral(peripheral: CBPeripheral) {
+        guard let cm = centralManager else { return }
+
+        if peripheral.state == .disconnected {
+            cm.connect(peripheral, options: nil)
+        }
+    }
+
+    func disconnectPeripheral(peripheral: CBPeripheral) {
+        guard let cm = centralManager else { return }
+        // don't check if peripheral.state == .connected, because it may be pending
+        cm.cancelPeripheralConnection(peripheral)
+    }
+
 }
 
 extension BLEDiscovery: CBCentralManagerDelegate {
