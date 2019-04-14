@@ -24,10 +24,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         bleDiscovery = BLEDiscovery.shared
-        registerForBleDiscoveryDidConnectPeripheralNotification()
-        registerForBleDiscoveryDidDisconnectPeripheralNotification()
-        registerForBleDiscoveryDidDiscoverServicesNotification()
-        registerForBleDiscoveryDidReadRSSINotification()
+        registerForNotifications()
 
         configureView()
 
@@ -102,6 +99,13 @@ class DetailViewController: UIViewController {
     }
 
     // MARK: - Register for notifications
+
+    func registerForNotifications() {
+        registerForBleDiscoveryDidConnectPeripheralNotification()
+        registerForBleDiscoveryDidDisconnectPeripheralNotification()
+        registerForBleDiscoveryDidDiscoverServicesNotification()
+        registerForBleDiscoveryDidReadRSSINotification()
+    }
 
     func registerForBleDiscoveryDidConnectPeripheralNotification() {
         guard let nc = bleDiscovery?.notificationCenter else { return }
