@@ -151,7 +151,7 @@ class DetailViewController: UIViewController {
                String(describing: notification.object))
 
         if notification.userInfo != nil {
-            if ((notification.userInfo?["peripheral"]) != nil) {
+            if ((notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue]) != nil) {
                 os_log("notification.userInfo: %@",
                        log: Logger.shared.log,
                        type: .debug,
@@ -171,7 +171,7 @@ class DetailViewController: UIViewController {
                String(describing: notification.object))
 
         if notification.userInfo != nil {
-            if ((notification.userInfo?["peripheral"]) != nil) {
+            if ((notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue]) != nil) {
                 os_log("notification.userInfo: %@",
                        log: Logger.shared.log,
                        type: .debug,
@@ -190,7 +190,7 @@ class DetailViewController: UIViewController {
                type: .debug,
                String(describing: notification.object))
 
-        if ((notification.userInfo?["peripheral"]) != nil) {
+        if ((notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue]) != nil) {
             os_log("notification.userInfo: %@",
                    log: Logger.shared.log,
                    type: .debug,
@@ -204,12 +204,12 @@ class DetailViewController: UIViewController {
                log: Logger.shared.log,
                type: .debug)
 
-        if detailItem == notification.userInfo?["peripheral"] as? CBPeripheral {
+        if detailItem == notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue] as? CBPeripheral {
             os_log("notification.userInfo: %@",
                    log: Logger.shared.log,
                    type: .debug,
                    String(describing:notification.userInfo))
-            rssiLabel.text = "\(notification.userInfo?["rssi"] ?? "-")"
+            rssiLabel.text = "\(notification.userInfo?[BLEDiscovery.UserInfoKeys.rssi.rawValue] ?? "-")"
         }
     }
 

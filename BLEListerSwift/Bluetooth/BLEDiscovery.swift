@@ -19,7 +19,13 @@ class BLEDiscovery: NSObject {
         case didDisconnectPeripheral = "didDisconnectPeripheral"
         case didDiscoverServices = "didDiscoverServices"
         case didReadRSSI = "didReadRSSI"
+    }
 
+    enum UserInfoKeys: String {
+        case advertisementData
+        case central
+        case peripheral
+        case rssi
     }
 
     var centralManager: CBCentralManager? = nil
@@ -311,10 +317,10 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         }
 
         // Argument rssi may be non-nil even when peripheral.rssi is nil??
-        let userInfo: [String: Any] = ["central" : central,
-                                       "peripheral" : peripheral,
-                                       "advertisementData" : advertisementData,
-                                       "rssi" : rssi]
+        let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.central.rawValue: central,
+                                       BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral,
+                                       BLEDiscovery.UserInfoKeys.advertisementData.rawValue: advertisementData,
+                                       BLEDiscovery.UserInfoKeys.rssi.rawValue: rssi]
 
         postDidRefresh(notificationCenter: notificationCenter, userInfo: userInfo)
     }
@@ -322,7 +328,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager,
                         didConnect peripheral: CBPeripheral) {
 
-        let userInfo: [String: Any] = ["peripheral": peripheral]
+        let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral]
         postDidConnectPeripheral(notificationCenter: notificationCenter,
                                  userInfo: userInfo)
         
@@ -347,7 +353,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
                    error.localizedDescription)
         }
 
-        let userInfo: [String: Any] = ["peripheral": peripheral]
+        let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral]
         postDidDisconnectPeripheral(notificationCenter: notificationCenter,
                                     userInfo: userInfo)
     }
@@ -367,7 +373,7 @@ extension BLEDiscovery: CBPeripheralDelegate {
                    type: .error,
                    error.localizedDescription)
         } else {
-            let userInfo: [String: Any] = ["peripheral": peripheral]
+            let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral]
             postDidDiscoverServices(notificationCenter: notificationCenter,
                                     userInfo: userInfo)
         }
@@ -382,7 +388,8 @@ extension BLEDiscovery: CBPeripheralDelegate {
                    type: .error,
                    error.localizedDescription)
         } else {
-            let userInfo: [String: Any] = ["peripheral": peripheral, "rssi": RSSI]
+            let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral,
+                                           BLEDiscovery.UserInfoKeys.rssi.rawValue: RSSI]
             postDidReadRSSI(notificationCenter: notificationCenter,
                             userInfo: userInfo)
         }
