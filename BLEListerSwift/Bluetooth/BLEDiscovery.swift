@@ -363,6 +363,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         // readRSSI calls back delegate method peripheral:didReadRSSI:error:
         peripheral.readRSSI()
 
+        // "Because there are size restrictions on the amount of data a peripheral can advertise, you may discover that a peripheral has more services than what it advertises (in its advertising packets). You can discover all of the services that a peripheral offers by calling the peripheral’s discoverServices method"
         // discoverServices calls back delegate method peripheral:didDiscoverServices:
         peripheral.discoverServices(nil)
     }

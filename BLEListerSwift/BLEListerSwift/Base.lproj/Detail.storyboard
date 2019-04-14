@@ -45,24 +45,24 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="16l-eN-EhC">
                                         <rect key="frame" x="0.0" y="28" width="374" height="60"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3U-IR-FAt">
-                                                <rect key="frame" x="0.0" y="0.0" width="274.5" height="60"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="WaO-D3-q8o"/>
-                                                </constraints>
-                                                <state key="normal" title="ServicesCharacteristics"/>
-                                                <connections>
-                                                    <action selector="discoverCharacteristicsTappedWithSender:" destination="JEX-9P-axG" eventType="touchUpInside" id="FuS-cB-8ak"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VNB-YS-fRl">
-                                                <rect key="frame" x="274.5" y="0.0" width="99.5" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="99.5" height="60"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="bub-s3-Oup"/>
                                                 </constraints>
                                                 <state key="normal" title="Connect"/>
                                                 <connections>
                                                     <action selector="connectTappedWithSender:" destination="JEX-9P-axG" eventType="touchUpInside" id="Xez-lO-2b0"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3U-IR-FAt">
+                                                <rect key="frame" x="99.5" y="0.0" width="274.5" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="WaO-D3-q8o"/>
+                                                </constraints>
+                                                <state key="normal" title="ServicesCharacteristics"/>
+                                                <connections>
+                                                    <action selector="discoverCharacteristicsTappedWithSender:" destination="JEX-9P-axG" eventType="touchUpInside" id="FuS-cB-8ak"/>
                                                 </connections>
                                             </button>
                                         </subviews>
