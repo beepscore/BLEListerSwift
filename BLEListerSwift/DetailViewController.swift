@@ -67,11 +67,11 @@ class DetailViewController: UIViewController {
         switch (state) {
 
         case .disconnected:
-            connectLabelText = "Connect"
+            connectLabelText = NSLocalizedString("Connect", comment: "Connect")
         case .connecting:
             connectLabelText = ""
         case .connected:
-            connectLabelText = "Disconnect"
+            connectLabelText = NSLocalizedString("Disconnect", comment: "Disconnect")
         default:
             connectLabelText = ""
         }
