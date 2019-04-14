@@ -93,7 +93,7 @@ class MasterViewController: UITableViewController {
             return cell
         }
         cell.textLabel!.text = discovery.foundPeripherals[indexPath.row].name
-        //cell.detailTextLabel!.text = String(describing: discovery.foundPeripherals[indexPath.row].rssi)
+        cell.detailTextLabel!.text = discovery.foundPeripherals[indexPath.row].identifier.uuidString
         return cell
     }
 
