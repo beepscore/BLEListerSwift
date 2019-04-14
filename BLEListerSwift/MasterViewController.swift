@@ -141,10 +141,6 @@ class MasterViewController: UITableViewController {
         os_log("MasterViewController discoveryDidRefreshWithNotification",
                log: Logger.shared.log,
                type: .debug)
-        os_log("notification.object: %@",
-               log: Logger.shared.log,
-               type: .debug,
-               String(describing: notification.object))
 
         if notification.userInfo != nil {
             os_log("notification.userInfo: %@",

@@ -163,10 +163,6 @@ class DetailViewController: UIViewController {
         os_log("DetailViewController discoveryDidConnectPeripheralWithNotification",
                log: Logger.shared.log,
                type: .debug)
-        os_log("notification.object: %@",
-               log: Logger.shared.log,
-               type: .debug,
-               String(describing: notification.object))
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
             os_log("notification.userInfo: %@",
@@ -181,10 +177,6 @@ class DetailViewController: UIViewController {
         os_log("DetailViewController discoveryDidDisconnectPeripheralWithNotification",
                log: Logger.shared.log,
                type: .debug)
-        os_log("notification.object: %@",
-               log: Logger.shared.log,
-               type: .debug,
-               String(describing: notification.object))
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
             os_log("notification.userInfo: %@",
