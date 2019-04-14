@@ -77,6 +77,13 @@ class DetailViewController: UIViewController {
         return connectLabelText;
     }
 
+    @IBAction func discoverCharacteristicsTapped(sender: Any) {
+        guard let discovery = bleDiscovery, let peripheral = peripheral else { return }
+        discovery.discoverAllServicesCharacteristics(peripheral: peripheral)
+        // update UI based on detailItem state
+        configureView();
+    }
+
     // MARK: - Connect / Disconnect
 
     @IBAction func connectTapped(sender: Any) {
@@ -104,6 +111,7 @@ class DetailViewController: UIViewController {
         registerForBleDiscoveryDidConnectPeripheralNotification()
         registerForBleDiscoveryDidDisconnectPeripheralNotification()
         registerForBleDiscoveryDidDiscoverServicesNotification()
+        registerForBleDiscoveryDidDiscoverCharacteristicsNotification()
         registerForBleDiscoveryDidReadRSSINotification()
     }
 
@@ -113,15 +121,6 @@ class DetailViewController: UIViewController {
         nc.addObserver(self,
                        selector:#selector(discoveryDidConnectPeripheralWithNotification(_:)),
                        name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
-                       object:nil)
-    }
-
-    func registerForBleDiscoveryDidReadRSSINotification() {
-        guard let nc = bleDiscovery?.notificationCenter else { return }
-
-        nc.addObserver(self,
-                       selector:#selector(discoveryDidReadRSSIWithNotification(_:)),
-                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didReadRSSI.rawValue),
                        object:nil)
     }
 
@@ -142,6 +141,25 @@ class DetailViewController: UIViewController {
                        name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverServices.rawValue),
                        object:nil)
     }
+
+    func registerForBleDiscoveryDidDiscoverCharacteristicsNotification() {
+        guard let nc = bleDiscovery?.notificationCenter else { return }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidDiscoverCharacteristicsWithNotification(_:)),
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverCharacteristics.rawValue),
+                       object:nil)
+    }
+
+    func registerForBleDiscoveryDidReadRSSINotification() {
+        guard let nc = bleDiscovery?.notificationCenter else { return }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidReadRSSIWithNotification(_:)),
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didReadRSSI.rawValue),
+                       object:nil)
+    }
+
 
     // MARK: - Notification handlers
 
@@ -189,6 +207,20 @@ class DetailViewController: UIViewController {
 
     @objc func discoveryDidDiscoverServicesWithNotification(_ notification: NSNotification) {
         os_log("DetailViewController discoveryDidDiscoverServicesWithNotification",
+               log: Logger.shared.log,
+               type: .debug)
+
+        if notificationContainsPeripheral(notification, peripheral: peripheral) {
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
+            configureView()
+        }
+    }
+
+    @objc func discoveryDidDiscoverCharacteristicsWithNotification(_ notification: NSNotification) {
+        os_log("DetailViewController discoveryDidDiscoverCharacteristicsWithNotification",
                log: Logger.shared.log,
                type: .debug)
 

@@ -13,12 +13,13 @@ import os.log
 class BLEDiscovery: NSObject {
 
     enum Notification: String {
-        case didRefresh = "didRefresh"
-        case statePoweredOff = "statePoweredOff"
-        case didConnectPeripheral = "didConnectPeripheral"
-        case didDisconnectPeripheral = "didDisconnectPeripheral"
-        case didDiscoverServices = "didDiscoverServices"
-        case didReadRSSI = "didReadRSSI"
+        case didConnectPeripheral
+        case didDisconnectPeripheral
+        case didDiscoverCharacteristics
+        case didDiscoverServices
+        case didReadRSSI
+        case didRefresh
+        case statePoweredOff
     }
 
     enum UserInfoKeys: String {
@@ -26,6 +27,7 @@ class BLEDiscovery: NSObject {
         case central
         case peripheral
         case rssi
+        case service
     }
 
     var centralManager: CBCentralManager? = nil
@@ -131,6 +133,18 @@ class BLEDiscovery: NSObject {
         cm.stopScan()
     }
 
+    // MARK: - service characteristics
+
+    func discoverAllServicesCharacteristics(peripheral: CBPeripheral) {
+        for service in peripheral.services ?? [] {
+            // calls CBPeripheralDelegate method
+            // peripheral(_ peripheral:, didDiscoverCharacteristicsFor service:, error:)
+            // Apple recommends supply characteristicsUUIDs.
+            // This app is a general scanner so supply nil
+            peripheral.discoverCharacteristics(nil, for: service)
+        }
+    }
+
     // MARK: - Connect/Disconnect
 
     func connectPeripheral(peripheral: CBPeripheral) {
@@ -203,6 +217,17 @@ class BLEDiscovery: NSObject {
 
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverServices.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    func postDidDiscoverCharacteristics(notificationCenter: NotificationCenter?,
+                                 userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverCharacteristics.rawValue),
                     object: self,
                     userInfo: userInfo)
         }
@@ -377,7 +402,22 @@ extension BLEDiscovery: CBPeripheralDelegate {
             postDidDiscoverServices(notificationCenter: notificationCenter,
                                     userInfo: userInfo)
         }
+    }
 
+    func peripheral(_ peripheral: CBPeripheral,
+                    didDiscoverCharacteristicsFor service: CBService,
+                    error: Error?) {
+        if let error = error {
+            os_log("peripheral didDiscoverCharacteristicsFor error: %@",
+                   log: Logger.shared.log,
+                   type: .error,
+                   error.localizedDescription)
+        } else {
+            let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral,
+                                           BLEDiscovery.UserInfoKeys.service.rawValue: service]
+            postDidDiscoverCharacteristics(notificationCenter: notificationCenter,
+                            userInfo: userInfo)
+        }
     }
 
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
