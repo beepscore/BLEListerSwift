@@ -25,7 +25,8 @@ class MasterViewController: UITableViewController {
 
         navigationItem.leftBarButtonItem = editButtonItem
 
-        let scanButton = UIBarButtonItem(barButtonSystemItem: .add,
+        let scanButton = UIBarButtonItem(title: NSLocalizedString("Scan", comment: "Scan"),
+                                         style: .plain,
                                          target: self,
                                          action: #selector(safeScanForPeripherals(_:)))
         navigationItem.rightBarButtonItem = scanButton
