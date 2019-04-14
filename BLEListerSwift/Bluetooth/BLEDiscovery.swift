@@ -257,12 +257,13 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         case .poweredOn:
             self.loadSavedDevices()
 
-            // FIXME: specify services argument
-            //NSArray *peripherals = [central retrieveConnectedPeripheralsWithServices:@[]];
+            // FIXME: specify serviceUUIDs
+            // "The list of connected peripherals can include those that are connected by other apps and that will need to be connected locally using the connect(_:options:) method before they can be used."
+            // let peripherals = retrieveConnectedPeripherals(withServices serviceUUIDs: [CBUUID])
 
             // Add to list.
-            //            for (CBPeripheral *peripheral in peripherals) {
-            //                // method documentation: Attempts to connect to a peripheral do not time out.
+            // for peripheral in peripherals {
+            // "Attempts to connect to a peripheral do not time out."
             //                [central connectPeripheral:peripheral options:nil];
             //            }
             self.postDidRefresh(notificationCenter: self.notificationCenter, userInfo: nil)
