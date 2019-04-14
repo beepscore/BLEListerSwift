@@ -36,7 +36,7 @@ class DetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    var detailItem: CBPeripheral? {
+    var peripheral: CBPeripheral? {
         didSet {
             // Update the view.
             configureView()
@@ -45,7 +45,7 @@ class DetailViewController: UIViewController {
 
     /// Update the user interface for the detail item
     func configureView() {
-        if let peripheral = detailItem {
+        if let peripheral = peripheral {
             title = peripheral.name
             if let label = detailDescriptionLabel {
                 label.text = peripheral.services.debugDescription
@@ -80,10 +80,10 @@ class DetailViewController: UIViewController {
     // MARK: - Connect / Disconnect
 
     @IBAction func connectTapped(sender: Any) {
-        guard let discovery = bleDiscovery, let peripheral = detailItem else { return }
-        if detailItem?.state == .disconnected {
+        guard let discovery = bleDiscovery, let peripheral = peripheral else { return }
+        if peripheral.state == .disconnected {
             connect(discovery: discovery, peripheral: peripheral)
-        } else if detailItem?.state == .connected {
+        } else if peripheral.state == .connected {
             disconnect(discovery: discovery, peripheral: peripheral);
         }
         // update UI based on detailItem state
@@ -145,6 +145,20 @@ class DetailViewController: UIViewController {
 
     // MARK: - Notification handlers
 
+    /// May be used to filter notifications by specified peripheral
+    /// - Parameters:
+    ///   - notification:
+    ///   - peripheral:
+    /// - Returns: true if notification userInfo contains peripheral, else returns false.
+    ///   returns false if userInfo or peripheral is nil
+    func notificationContainsPeripheral(_ notification: NSNotification,
+                                        peripheral: CBPeripheral?) -> Bool {
+        if notification.userInfo == nil { return false }
+        guard let notificationPeripheral = notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue] as? CBPeripheral
+            else { return false }
+        return notificationPeripheral == peripheral
+    }
+
     @objc func discoveryDidConnectPeripheralWithNotification(_ notification: NSNotification) {
         os_log("DetailViewController discoveryDidConnectPeripheralWithNotification",
                log: Logger.shared.log,
@@ -154,14 +168,12 @@ class DetailViewController: UIViewController {
                type: .debug,
                String(describing: notification.object))
 
-        if notification.userInfo != nil {
-            if ((notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue]) != nil) {
-                os_log("notification.userInfo: %@",
-                       log: Logger.shared.log,
-                       type: .debug,
-                       String(describing:notification.userInfo))
-                configureView()
-            }
+        if notificationContainsPeripheral(notification, peripheral: peripheral) {
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
+            configureView()
         }
     }
 
@@ -174,14 +186,12 @@ class DetailViewController: UIViewController {
                type: .debug,
                String(describing: notification.object))
 
-        if notification.userInfo != nil {
-            if ((notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue]) != nil) {
-                os_log("notification.userInfo: %@",
-                       log: Logger.shared.log,
-                       type: .debug,
-                       String(describing:notification.userInfo))
-                configureView()
-            }
+        if notificationContainsPeripheral(notification, peripheral: peripheral) {
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
+            configureView()
         }
     }
 
@@ -189,12 +199,8 @@ class DetailViewController: UIViewController {
         os_log("DetailViewController discoveryDidDiscoverServicesWithNotification",
                log: Logger.shared.log,
                type: .debug)
-        os_log("notification.object: %@",
-               log: Logger.shared.log,
-               type: .debug,
-               String(describing: notification.object))
 
-        if ((notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue]) != nil) {
+        if notificationContainsPeripheral(notification, peripheral: peripheral) {
             os_log("notification.userInfo: %@",
                    log: Logger.shared.log,
                    type: .debug,
@@ -208,7 +214,7 @@ class DetailViewController: UIViewController {
                log: Logger.shared.log,
                type: .debug)
 
-        if detailItem == notification.userInfo?[BLEDiscovery.UserInfoKeys.peripheral.rawValue] as? CBPeripheral {
+        if notificationContainsPeripheral(notification, peripheral: peripheral) {
             os_log("notification.userInfo: %@",
                    log: Logger.shared.log,
                    type: .debug,
