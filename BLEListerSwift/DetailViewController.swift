@@ -209,7 +209,7 @@ class DetailViewController: UIViewController {
                    log: Logger.shared.log,
                    type: .debug,
                    String(describing:notification.userInfo))
-            rssiLabel.text = String(describing: notification.userInfo?["rssi"])
+            rssiLabel.text = "\(notification.userInfo?["rssi"] ?? "-")"
         }
     }
 
