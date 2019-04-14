@@ -9,6 +9,9 @@ iOS 10.3 or newer.
 
 # References
 
+## Performing Common Central Role Tasks 
+https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/PerformingCommonCentralRoleTasks/PerformingCommonCentralRoleTasks.html
+
 ## Objective C Examples
 BLELister
 https://github.com/beepscore/BLELister
