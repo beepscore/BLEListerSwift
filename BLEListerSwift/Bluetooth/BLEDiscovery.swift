@@ -18,6 +18,8 @@ class BLEDiscovery: NSObject {
         case didConnectPeripheral = "didConnectPeripheral"
         case didDisconnectPeripheral = "didDisconnectPeripheral"
         case didDiscoverServices = "didDiscoverServices"
+        case didReadRSSI = "didReadRSSI"
+
     }
 
     var centralManager: CBCentralManager? = nil
@@ -200,6 +202,19 @@ class BLEDiscovery: NSObject {
         }
     }
 
+    func postDidReadRSSI(notificationCenter: NotificationCenter?,
+                                 userInfo: [String: Any]?) {
+        guard let nc = notificationCenter else { return }
+
+        DispatchQueue.main.async {
+            nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didReadRSSI.rawValue),
+                    object: self,
+                    userInfo: userInfo)
+        }
+    }
+
+    // MARK: -
+
     func clearDevices() {
         self.foundPeripherals = []
         // TODO: reset each service before removing it? Reference Apple TemperatureSensor project
@@ -313,11 +328,9 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         
         peripheral.delegate = self as CBPeripheralDelegate
 
-        // TODO: consider call readRSSI
         // must be connected to call readRSSI
-        // could set timer to repeatedly call readRSSI
         // readRSSI calls back delegate method peripheral:didReadRSSI:error:
-        // peripheral.readRSSI()
+        peripheral.readRSSI()
 
         // discoverServices calls back delegate method peripheral:didDiscoverServices:
         peripheral.discoverServices(nil)
@@ -353,11 +366,26 @@ extension BLEDiscovery: CBPeripheralDelegate {
                    log: Logger.shared.log,
                    type: .error,
                    error.localizedDescription)
+        } else {
+            let userInfo: [String: Any] = ["peripheral": peripheral]
+            postDidDiscoverServices(notificationCenter: notificationCenter,
+                                    userInfo: userInfo)
         }
-        let userInfo: [String: Any] = ["peripheral": peripheral]
-        postDidDiscoverServices(notificationCenter: notificationCenter,
-                                userInfo: userInfo)
 
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+
+        if let error = error {
+            os_log("peripheral didReadRSSI error: %@",
+                   log: Logger.shared.log,
+                   type: .error,
+                   error.localizedDescription)
+        } else {
+            let userInfo: [String: Any] = ["peripheral": peripheral, "rssi": RSSI]
+            postDidReadRSSI(notificationCenter: notificationCenter,
+                            userInfo: userInfo)
+        }
     }
 
 }

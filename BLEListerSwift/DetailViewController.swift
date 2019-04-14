@@ -27,6 +27,7 @@ class DetailViewController: UIViewController {
         registerForBleDiscoveryDidConnectPeripheralNotification()
         registerForBleDiscoveryDidDisconnectPeripheralNotification()
         registerForBleDiscoveryDidDiscoverServicesNotification()
+        registerForBleDiscoveryDidReadRSSINotification()
 
         configureView()
 
@@ -111,6 +112,15 @@ class DetailViewController: UIViewController {
                        object:nil)
     }
 
+    func registerForBleDiscoveryDidReadRSSINotification() {
+        guard let nc = bleDiscovery?.notificationCenter else { return }
+
+        nc.addObserver(self,
+                       selector:#selector(discoveryDidReadRSSIWithNotification(_:)),
+                       name:NSNotification.Name(rawValue: BLEDiscovery.Notification.didReadRSSI.rawValue),
+                       object:nil)
+    }
+
     func registerForBleDiscoveryDidDisconnectPeripheralNotification() {
         guard let nc = bleDiscovery?.notificationCenter else { return }
 
@@ -186,6 +196,20 @@ class DetailViewController: UIViewController {
                    type: .debug,
                    String(describing:notification.userInfo))
             configureView()
+        }
+    }
+
+    @objc func discoveryDidReadRSSIWithNotification(_ notification: NSNotification) {
+        os_log("DetailViewController discoveryDidReadRSSIWithNotification",
+               log: Logger.shared.log,
+               type: .debug)
+
+        if detailItem == notification.userInfo?["peripheral"] as? CBPeripheral {
+            os_log("notification.userInfo: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   String(describing:notification.userInfo))
+            rssiLabel.text = String(describing: notification.userInfo?["rssi"])
         }
     }
 
