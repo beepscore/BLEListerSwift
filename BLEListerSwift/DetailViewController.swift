@@ -54,6 +54,15 @@ class DetailViewController: UIViewController {
             if let advertisementLabel = advertisementLabel {
                 advertisementLabel.text = bleDiscovery?.advertisementDatas[peripheral.identifier].debugDescription
             }
+            if let rssiLabel = rssiLabel,
+                let bleDiscovery = bleDiscovery,
+                let rssiValue = bleDiscovery.rssis[peripheral.identifier] {
+                if let rssiValueUnwrapped = rssiValue {
+                    rssiLabel.text = "\(rssiValueUnwrapped)"
+                } else {
+                    rssiLabel.text = "-"
+                }
+            }
             if let servicesLabel = servicesLabel {
                 servicesLabel.text = peripheral.services.debugDescription
             }

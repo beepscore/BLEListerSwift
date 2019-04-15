@@ -41,6 +41,10 @@ class BLEDiscovery: NSObject {
     /// delegate callbacks and notifications.
     var advertisementDatas: [UUID: [String: Any]] = [:]
 
+    /// dictionary keys are CBPeripheral identification
+    /// values are each peripheral's RSSI.
+    var rssis: [UUID: NSNumber?] = [:]
+
     // TODO: consider delete if unused/unneeded
     // services for all connected devices.
     var connectedServices: [CBService]? = []
@@ -262,6 +266,8 @@ class BLEDiscovery: NSObject {
         self.foundPeripherals = []
         // TODO: reset each service before removing it? Reference Apple TemperatureSensor project
         self.connectedServices = []
+        self.advertisementDatas = [:]
+        self.rssis = [:]
     }
 
     func loadSavedDevices() {
@@ -352,6 +358,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
             peripheral.delegate = self as CBPeripheralDelegate
             foundPeripherals.append(peripheral)
             advertisementDatas[peripheral.identifier] = advertisementData
+            rssis[peripheral.identifier] = rssi
         }
 
         // Argument rssi may be non-nil even when peripheral.rssi is nil??
@@ -442,6 +449,7 @@ extension BLEDiscovery: CBPeripheralDelegate {
                    type: .error,
                    error.localizedDescription)
         } else {
+            rssis[peripheral.identifier] = RSSI
             let userInfo: [String: Any] = [BLEDiscovery.UserInfoKeys.peripheral.rawValue: peripheral,
                                            BLEDiscovery.UserInfoKeys.rssi.rawValue: RSSI]
             postDidReadRSSI(notificationCenter: notificationCenter,
