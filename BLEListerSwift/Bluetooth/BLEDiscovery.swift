@@ -32,7 +32,19 @@ class BLEDiscovery: NSObject {
 
     var centralManager: CBCentralManager? = nil
     var foundPeripherals: [CBPeripheral] = []
+
+    /// dictionary keys are CBPeripheral identification
+    /// values are each peripheral's advertisementData.
+    /// Alternatively I made a BLEPeripheral
+    /// composed of a CBPeripheral and an advertisementData,
+    /// but that seemed more complicated with respect to
+    /// delegate callbacks and notifications.
+    var advertisementDatas: [UUID: [String: Any]] = [:]
+
+    // TODO: consider delete if unused/unneeded
+    // services for all connected devices.
     var connectedServices: [CBService]? = []
+
     var notificationCenter: NotificationCenter? = nil
 
     var isFirstRun = true
@@ -339,6 +351,7 @@ extension BLEDiscovery: CBCentralManagerDelegate {
         if peripheral.name != nil && !(foundPeripherals.contains(peripheral)) {
             peripheral.delegate = self as CBPeripheralDelegate
             foundPeripherals.append(peripheral)
+            advertisementDatas[peripheral.identifier] = advertisementData
         }
 
         // Argument rssi may be non-nil even when peripheral.rssi is nil??

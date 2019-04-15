@@ -14,7 +14,8 @@ class DetailViewController: UIViewController {
 
     var bleDiscovery: BLEDiscovery?
     
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var advertisementLabel: UILabel!
+    @IBOutlet weak var servicesLabel: UILabel!
     @IBOutlet weak var identifierLabel: UILabel!
     @IBOutlet weak var rssiLabel: UILabel!
 
@@ -47,11 +48,14 @@ class DetailViewController: UIViewController {
     func configureView() {
         if let peripheral = peripheral {
             title = peripheral.name
-            if let label = detailDescriptionLabel {
-                label.text = peripheral.services.debugDescription
-            }
             if let identifierLabel = identifierLabel {
                 identifierLabel.text = peripheral.identifier.debugDescription
+            }
+            if let advertisementLabel = advertisementLabel {
+                advertisementLabel.text = bleDiscovery?.advertisementDatas[peripheral.identifier].debugDescription
+            }
+            if let servicesLabel = servicesLabel {
+                servicesLabel.text = peripheral.services.debugDescription
             }
             if let connectButton = connectButton {
                 let buttonTitle = connectLabelTextForState(peripheral.state)
