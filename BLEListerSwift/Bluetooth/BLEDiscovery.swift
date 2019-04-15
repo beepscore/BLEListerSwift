@@ -185,6 +185,11 @@ class BLEDiscovery: NSObject {
                         userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
 
+        os_log("postDidRefresh userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
+
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didRefresh.rawValue),
                     object: self,
@@ -198,6 +203,11 @@ class BLEDiscovery: NSObject {
                         userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
 
+        os_log("postPoweredOff userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
+
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.statePoweredOff.rawValue),
                     object: self,
@@ -208,6 +218,11 @@ class BLEDiscovery: NSObject {
     func postDidConnectPeripheral(notificationCenter: NotificationCenter?,
                                   userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
+
+        os_log("postDidConnectPeripheral userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
 
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didConnectPeripheral.rawValue),
@@ -220,6 +235,11 @@ class BLEDiscovery: NSObject {
                                      userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
 
+        os_log("postDidDisconnectPeripheral userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
+
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDisconnectPeripheral.rawValue),
                     object: self,
@@ -230,6 +250,11 @@ class BLEDiscovery: NSObject {
     func postDidDiscoverServices(notificationCenter: NotificationCenter?,
                                      userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
+
+        os_log("postDidDiscoverServices userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
 
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverServices.rawValue),
@@ -242,6 +267,11 @@ class BLEDiscovery: NSObject {
                                  userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
 
+        os_log("postDidDiscoverCharacteristics userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
+
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didDiscoverCharacteristics.rawValue),
                     object: self,
@@ -252,6 +282,11 @@ class BLEDiscovery: NSObject {
     func postDidReadRSSI(notificationCenter: NotificationCenter?,
                                  userInfo: [String: Any]?) {
         guard let nc = notificationCenter else { return }
+
+        os_log("postDidReadRSSI userInfo: %@",
+               log: Logger.shared.log,
+               type: .debug,
+               String(describing:userInfo))
 
         DispatchQueue.main.async {
             nc.post(name: NSNotification.Name(rawValue: BLEDiscovery.Notification.didReadRSSI.rawValue),

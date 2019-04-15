@@ -47,21 +47,34 @@ class DetailViewController: UIViewController {
     /// Update the user interface for the detail item
     func configureView() {
         if let peripheral = peripheral {
-            title = peripheral.name
+
+            let advertisementDataText = bleDiscovery?.advertisementDatas[peripheral.identifier].debugDescription
+
+            // may be nil
+            let rssiValue = bleDiscovery?.rssis[peripheral.identifier] as? NSNumber
+            var rssiValueText = "-"
+            if let rssiValueUnwrapped = rssiValue {
+                rssiValueText = "\(rssiValueUnwrapped)"
+            }
+
+            os_log("configureView peripheral name: %@\nidentifier: %@\nadvertisement: %@\nrssi: %@\nservices: %@",
+                   log: Logger.shared.log,
+                   type: .debug,
+                   peripheral.name ?? "-",
+                   peripheral.identifier.description,
+                   advertisementDataText ?? "-",
+                   rssiValueText,
+                   peripheral.services?.description ?? "-")
+
+            title = peripheral.name ?? "-"
             if let identifierLabel = identifierLabel {
                 identifierLabel.text = peripheral.identifier.debugDescription
             }
             if let advertisementLabel = advertisementLabel {
-                advertisementLabel.text = bleDiscovery?.advertisementDatas[peripheral.identifier].debugDescription
+                advertisementLabel.text = advertisementDataText
             }
-            if let rssiLabel = rssiLabel,
-                let bleDiscovery = bleDiscovery,
-                let rssiValue = bleDiscovery.rssis[peripheral.identifier] {
-                if let rssiValueUnwrapped = rssiValue {
-                    rssiLabel.text = "\(rssiValueUnwrapped)"
-                } else {
-                    rssiLabel.text = "-"
-                }
+            if let rssiLabel = rssiLabel {
+                rssiLabel.text = rssiValueText
             }
             if let servicesLabel = servicesLabel {
                 servicesLabel.text = peripheral.services.debugDescription
@@ -202,10 +215,6 @@ class DetailViewController: UIViewController {
                type: .debug)
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
-            os_log("notification.userInfo: %@",
-                   log: Logger.shared.log,
-                   type: .debug,
-                   String(describing:notification.userInfo))
             configureView()
         }
     }
@@ -216,10 +225,6 @@ class DetailViewController: UIViewController {
                type: .debug)
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
-            os_log("notification.userInfo: %@",
-                   log: Logger.shared.log,
-                   type: .debug,
-                   String(describing:notification.userInfo))
             configureView()
         }
     }
@@ -230,10 +235,6 @@ class DetailViewController: UIViewController {
                type: .debug)
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
-            os_log("notification.userInfo: %@",
-                   log: Logger.shared.log,
-                   type: .debug,
-                   String(describing:notification.userInfo))
             configureView()
         }
     }
@@ -244,10 +245,6 @@ class DetailViewController: UIViewController {
                type: .debug)
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
-            os_log("notification.userInfo: %@",
-                   log: Logger.shared.log,
-                   type: .debug,
-                   String(describing:notification.userInfo))
             configureView()
         }
     }
@@ -258,10 +255,6 @@ class DetailViewController: UIViewController {
                type: .debug)
 
         if notificationContainsPeripheral(notification, peripheral: peripheral) {
-            os_log("notification.userInfo: %@",
-                   log: Logger.shared.log,
-                   type: .debug,
-                   String(describing:notification.userInfo))
             configureView()
         }
     }
