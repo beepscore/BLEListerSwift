@@ -76,17 +76,18 @@ class DetailViewController: UIViewController {
     func connectLabelTextForState(_ state: CBPeripheralState) -> String {
         var connectLabelText = ""
         switch (state) {
-
-        case .disconnected:
-            connectLabelText = NSLocalizedString("Connect", comment: "Connect")
-        case .connecting:
-            connectLabelText = ""
+            
         case .connected:
             connectLabelText = NSLocalizedString("Disconnect", comment: "Disconnect")
+        case .connecting:
+            connectLabelText = NSLocalizedString("connecting...", comment: "connecting...")
+        case .disconnected:
+            connectLabelText = NSLocalizedString("Connect", comment: "Connect")
+        case .disconnecting:
+            connectLabelText = NSLocalizedString("disconnecting...", comment: "disconnecting...")
         default:
-            connectLabelText = ""
+            connectLabelText = "-"
         }
-
         return connectLabelText;
     }
 
@@ -101,12 +102,17 @@ class DetailViewController: UIViewController {
 
     @IBAction func connectTapped(sender: Any) {
         guard let discovery = bleDiscovery, let peripheral = peripheral else { return }
-        if peripheral.state == .disconnected {
+        switch (peripheral.state) {
+        case .connected:
+            disconnect(discovery: discovery, peripheral: peripheral)
+        case .disconnected:
             connect(discovery: discovery, peripheral: peripheral)
-        } else if peripheral.state == .connected {
-            disconnect(discovery: discovery, peripheral: peripheral);
+        case .connecting, .disconnecting:
+            break
+        default:
+            break
         }
-        // update UI based on detailItem state
+        // update UI based on peripheral state
         configureView();
     }
 
@@ -256,7 +262,7 @@ class DetailViewController: UIViewController {
                    log: Logger.shared.log,
                    type: .debug,
                    String(describing:notification.userInfo))
-            rssiLabel.text = "\(notification.userInfo?[BLEDiscovery.UserInfoKeys.rssi.rawValue] ?? "-")"
+            configureView()
         }
     }
 
